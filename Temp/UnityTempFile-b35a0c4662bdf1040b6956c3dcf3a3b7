@@ -1,6 +1,6 @@
 /target:library
 /nowarn:0169
-/out:Temp/Unity.Analytics.DataPrivacy.dll
+/out:Temp/Assembly-CSharp.dll
 /debug:portable
 /optimize-
 /nostdlib+
@@ -68,24 +68,19 @@
 /reference:"C:\Program Files\Unity\Hub\Editor\2018.4.10f1\Editor\Data\Managed/UnityEngine/UnityEngine.XRModule.dll"
 /reference:"C:\Program Files\Unity\Hub\Editor\2018.4.10f1\Editor\Data\Managed/UnityEditor.dll"
 /reference:"C:\Program Files\Unity\Hub\Editor\2018.4.10f1\Editor\Data\Managed/Unity.Locator.dll"
+/reference:Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll
+/reference:Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll
+/reference:Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll
+/reference:Library/ScriptAssemblies/Unity.TextMeshPro.dll
+/reference:Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll
 /reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll"
-/reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/Timeline/RuntimeEditor/UnityEngine.Timeline.dll"
-/reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/Timeline/Editor/UnityEditor.Timeline.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll"
-/reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll"
-/reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/UnityGoogleAudioSpatializer/Editor/UnityEditor.GoogleAudioSpatializer.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/UnityGoogleAudioSpatializer/RuntimeEditor/UnityEngine.GoogleAudioSpatializer.dll"
-/reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/Editor/UnityEditor.SpatialTracking.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll"
-/reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll"
-/reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/Managed/UnityEditor.Graphs.dll"
-/reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/PlaybackEngines/windowsstandalonesupport/UnityEditor.WindowsStandalone.Extensions.dll"
-/reference:C:/Users/Owner/Documents/GitHub/BestGame/Library/PackageCache/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll
 /reference:C:/Users/Owner/Documents/GitHub/BestGame/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll
 /reference:C:/Users/Owner/Documents/GitHub/BestGame/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll
 /reference:C:/Users/Owner/Documents/GitHub/BestGame/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll
-/reference:C:/Users/Owner/Documents/GitHub/BestGame/Library/PackageCache/com.unity.purchasing@2.0.3/Editor/UnityEditor.Purchasing.dll
 /reference:"C:\Program Files\Unity\Hub\Editor\2018.4.10f1\Editor\Data\NetStandard\ref\2.0.0\netstandard.dll"
 /reference:"C:\Program Files\Unity\Hub\Editor\2018.4.10f1\Editor\Data\NetStandard\compat\2.0.0\shims\netstandard\Microsoft.Win32.Primitives.dll"
 /reference:"C:\Program Files\Unity\Hub\Editor\2018.4.10f1\Editor\Data\NetStandard\compat\2.0.0\shims\netstandard\System.AppContext.dll"
@@ -302,6 +297,7 @@
 /define:ENABLE_VSTU
 /define:CSHARP_7_OR_LATER
 /define:CSHARP_7_3_OR_NEWER
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.analytics@3.2.2\DataPrivacy\AssemblyInfo.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.analytics@3.2.2\DataPrivacy\DataPrivacy.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.analytics@3.2.2\DataPrivacy\DataPrivacyButton.cs
+Assets\Scripts\hello.cs
+Assets\Scripts\LaserGun.cs
+Assets\Scripts\MainCam.cs
+Assets\Scripts\SpiderWave.cs

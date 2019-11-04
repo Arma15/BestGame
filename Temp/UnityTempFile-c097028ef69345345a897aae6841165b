@@ -299,4 +299,5 @@
 /define:CSHARP_7_3_OR_NEWER
 Assets\Scripts\hello.cs
 Assets\Scripts\LaserGun.cs
+Assets\Scripts\MainCam.cs
 Assets\Scripts\SpiderWave.cs
