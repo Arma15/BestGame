@@ -1,6 +1,6 @@
 /target:library
 /nowarn:0169
-/out:Temp/Unity.TextMeshPro.dll
+/out:Temp/Assembly-CSharp.dll
 /debug:portable
 /optimize-
 /nostdlib+
@@ -68,26 +68,19 @@
 /reference:"C:\Program Files\Unity\Hub\Editor\2018.4.10f1\Editor\Data\Managed/UnityEngine/UnityEngine.XRModule.dll"
 /reference:"C:\Program Files\Unity\Hub\Editor\2018.4.10f1\Editor\Data\Managed/UnityEditor.dll"
 /reference:"C:\Program Files\Unity\Hub\Editor\2018.4.10f1\Editor\Data\Managed/Unity.Locator.dll"
+/reference:Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll
+/reference:Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll
+/reference:Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll
+/reference:Library/ScriptAssemblies/Unity.TextMeshPro.dll
+/reference:Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll
 /reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll"
-/reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/Timeline/RuntimeEditor/UnityEngine.Timeline.dll"
-/reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/Timeline/Editor/UnityEditor.Timeline.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll"
-/reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll"
-/reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/UnityGoogleAudioSpatializer/Editor/UnityEditor.GoogleAudioSpatializer.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/UnityGoogleAudioSpatializer/RuntimeEditor/UnityEngine.GoogleAudioSpatializer.dll"
-/reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/Editor/UnityEditor.SpatialTracking.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll"
-/reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll"
-/reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/Managed/UnityEditor.Graphs.dll"
-/reference:"C:/Program Files/Unity/Hub/Editor/2018.4.10f1/Editor/Data/PlaybackEngines/windowsstandalonesupport/UnityEditor.WindowsStandalone.Extensions.dll"
-/reference:C:/Users/Owner/Documents/GitHub/BestGame/Library/PackageCache/com.unity.ads@2.0.8/UnityEngine.Advertisements.dll
-/reference:C:/Users/Owner/Documents/GitHub/BestGame/Library/PackageCache/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll
 /reference:C:/Users/Owner/Documents/GitHub/BestGame/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll
 /reference:C:/Users/Owner/Documents/GitHub/BestGame/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll
 /reference:C:/Users/Owner/Documents/GitHub/BestGame/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll
-/reference:C:/Users/Owner/Documents/GitHub/BestGame/Library/PackageCache/com.unity.purchasing@2.0.3/UnityEngine.Purchasing.dll
-/reference:C:/Users/Owner/Documents/GitHub/BestGame/Library/PackageCache/com.unity.purchasing@2.0.3/Editor/UnityEditor.Purchasing.dll
 /reference:"C:\Program Files\Unity\Hub\Editor\2018.4.10f1\Editor\Data\NetStandard\ref\2.0.0\netstandard.dll"
 /reference:"C:\Program Files\Unity\Hub\Editor\2018.4.10f1\Editor\Data\NetStandard\compat\2.0.0\shims\netstandard\Microsoft.Win32.Primitives.dll"
 /reference:"C:\Program Files\Unity\Hub\Editor\2018.4.10f1\Editor\Data\NetStandard\compat\2.0.0\shims\netstandard\System.AppContext.dll"
@@ -304,59 +297,7 @@
 /define:ENABLE_VSTU
 /define:CSHARP_7_OR_LATER
 /define:CSHARP_7_3_OR_NEWER
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\AssemblyInfo.cs.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\FastAction.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\MaterialReferenceManager.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TextContainer.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TextMeshPro.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TextMeshProUGUI.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_Asset.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_Character.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_CharacterInfo.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_ColorGradient.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_CoroutineTween.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_DefaultControls.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_Dropdown.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_EditorResourceManager.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_FontAsset.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_FontAssetCommon.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_FontAssetUtilities.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_FontFeaturesCommon.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_FontFeatureTable.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_InputField.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_InputValidator.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_LineInfo.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_ListPool.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_MaterialManager.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_MeshInfo.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_ObjectPool.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_PackageResourceImporter.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_RichTextTagsCommon.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_RichTextTagStack.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_ScrollbarEventHandler.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_SelectionCaret.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_Settings.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_ShaderUtilities.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_Sprite.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_SpriteAnimator.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_SpriteAsset.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_SpriteAssetImportFormats.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_SpriteCharacter.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_SpriteGlyph.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_Style.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_StyleSheet.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_SubMesh.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_SubMeshUI.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_Text.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_TextElement.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_TextElement_Legacy.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_TextInfo.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_TextParsingUtilities.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_TextUtilities.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_UpdateManager.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMP_UpdateRegistery.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMPro_EventManager.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMPro_ExtensionMethods.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMPro_MeshUtilities.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMPro_Private.cs
-C:\Users\Owner\Documents\GitHub\BestGame\Library\PackageCache\com.unity.textmeshpro@1.4.1\Scripts\Runtime\TMPro_UGUI_Private.cs
+Assets\Scripts\hello.cs
+Assets\Scripts\LaserGun.cs
+Assets\Scripts\MainCam.cs
+Assets\Scripts\SpiderWave.cs
