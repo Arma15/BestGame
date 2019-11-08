@@ -19,7 +19,6 @@ public class SpiderWave : MonoBehaviour
     {
         spiderTimer = 0;
         currentSpider = 0;
-        currentSpider = 0;
         spiderInitiationFreq = 150;
 
     }
@@ -33,16 +32,16 @@ public class SpiderWave : MonoBehaviour
 
         if(spiderTimer == 0)
         {
-            float posX = Random.Range(-1542, -738);
-            float posY = Random.Range(-369, -67);
+            float posX = Random.Range(-400, 400);
+            float posY = Random.Range(0, 50);
 
-            float[] zRoomBounds = new float[2] { -2688, -1977 };
+            float[] zRoomBounds = new float[2] { -350, 400 };
             int indexZ = rnd.Next(0, 2);//Random # btw 0 and 1
             Debug.Log(indexZ);
             float posZ = zRoomBounds[indexZ];
 
             spiders[currentSpider] = Instantiate(spiderPrefab, new Vector3(posX, posY, posZ), Quaternion.Euler(-76.095f, -0.195f, -31.17f)) as GameObject;
-            spiders[currentSpider].transform.localScale = new Vector3(5, 5, 5);
+            spiders[currentSpider].transform.localScale = new Vector3(10, 10, 10);
 
             currentSpider++;
         }
