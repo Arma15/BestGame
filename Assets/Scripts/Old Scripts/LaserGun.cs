@@ -5,8 +5,6 @@ using UnityEngine;
 public class LaserGun : MonoBehaviour
 {
 
-    public float turnSpeed = 50f;
-
 
     public float degToRad(float angle)
     {
