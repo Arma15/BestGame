@@ -29,7 +29,7 @@ public class LaserPistol : MonoBehaviour
                 //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
                 //Debug.DrawLine(new Vector3(0,0,0), new Vector3(1,1,1), Color.white, 100f);
                 //Debug.DrawLine(transform.position, transform.forward, Color.white, 100f);
-                Debug.DrawRay(transform.position, transform.forward, Color.green, 100f);
+                Debug.DrawRay(transform.position, transform.forward, Color.green, 1000f);
                 //Destroy(hit.collider.gameObject);
             }
         }
