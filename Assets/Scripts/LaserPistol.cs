@@ -22,29 +22,26 @@ public class LaserPistol : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
 
+            //Draw ray
+            Debug.DrawRay(transform.position, transform.forward * 10000, Color.red, 0.05f);
+            //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 10000, Color.red, 0.05f);
+
+
             //Play sound
             laserBurst = GetComponent<AudioSource>();
             laserBurst.Play(0);
 
 
-            //if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
+            if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
+            //if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
             {
                 //Debug.Log("Hit " + hit.collider.gameObject.name, hit.collider.gameObject);
                 //Debug.Log("Hit " + hit.collider.gameObject.name+" at distance " + hit.distance);
 
 
 
-                //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-                //Debug.DrawLine(new Vector3(0,0,0), new Vector3(1,1,1), Color.white, 100f);
-                //Debug.DrawLine(transform.position, transform.forward, Color.white, 100f);
-                //Debug.DrawRay(transform.position, transform.forward, Color.green, 1000f);
-
-
-
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 10000, Color.red);
-
-
+                //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.red, 0.05f);
+                
                 //Kill spider
                 Destroy(hit.collider.gameObject);
                 //numSpiders--;
