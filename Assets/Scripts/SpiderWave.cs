@@ -7,10 +7,10 @@ public class SpiderWave : MonoBehaviour
     public System.Random rnd = new System.Random();
     int numSpiders;
     int spiderInitiationTimer;
-    int spiderRotationTimer;
+    //int spiderRotationTimer;
     int currentSpider;
     int spiderInitiationFreq;
-    int spiderRotationFreq;
+    //int spiderRotationFreq;
 
     public GameObject house;
     public GameObject player;
@@ -20,21 +20,30 @@ public class SpiderWave : MonoBehaviour
 
     GameObject[] spiders;
     float[] spiderMoveSpeed;
+    int[] spiderBodyRotationFreq;
+    int[] spiderRotationTimer;
     //GameObject spider1;
-    
+
+
+    int randFreq()
+    {
+        return rnd.Next(90, 180);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         numSpiders = 40;
         spiderInitiationTimer = 0;
-        spiderRotationTimer = 0;
+        //spiderRotationTimer = 0;
         currentSpider = 0;
-        spiderInitiationFreq = 150;
-        spiderRotationFreq = 10;
+        spiderInitiationFreq = randFreq(); 
+        //spiderRotationFreq = 10;
 
         spiders = new GameObject[numSpiders];
         spiderMoveSpeed = new float[numSpiders];
+        spiderBodyRotationFreq = new int[numSpiders];
+        spiderRotationTimer = new int[numSpiders];
 
         //spiderAppearSound = gameObject.GetComponent<AudioSource>();
 
@@ -47,10 +56,10 @@ public class SpiderWave : MonoBehaviour
         spiderInitiationTimer += 1;
         spiderInitiationTimer = spiderInitiationTimer % spiderInitiationFreq;
 
-        spiderRotationTimer += 1;
-        spiderRotationTimer = spiderRotationTimer % spiderRotationFreq;
+        //spiderRotationTimer += 1;
+        //spiderRotationTimer = spiderRotationTimer % spiderRotationFreq;
 
-        if(spiderInitiationTimer == 0)
+        if(spiderInitiationTimer == 0 && currentSpider < numSpiders)
         {
             float posX = Random.Range(-400, 400);
             float posY = Random.Range(0, 50);
@@ -64,11 +73,27 @@ public class SpiderWave : MonoBehaviour
             spiders[currentSpider] = Instantiate(spiderPrefab, new Vector3(posX, posY, posZ), Quaternion.Euler(-76.095f, -0.195f, -31.17f)) as GameObject;
             spiders[currentSpider].transform.localScale = new Vector3(10, 10, 10);
             spiderMoveSpeed[currentSpider] = moveSpeeed;
+            spiderBodyRotationFreq[currentSpider] = rnd.Next(9, 15);//Random # btw 9 and 14
+            spiderRotationTimer[currentSpider] = 0;
 
             //spiders[currentSpider].transform.gameObject.AddComponent(MeshCollider);
             //spiderAppearSound.Play();
 
+            //Mesh mesh = (MeshFilter)spiders[currentSpider].GetComponent<MeshFilter>().mesh;
+            /*Mesh mesh = spiderPrefab.GetComponent<MeshFilter>().mesh;
+            if (mesh != null)
+            {
+                // Add a new MeshCollider to the object
+                //MeshCollider meshCollider = spiders[currentSpider].AddComponent<MeshCollider>();
+                MeshCollider meshCollider = spiders[currentSpider].AddComponent<MeshCollider>();
+
+                // Finaly we set the Mesh in the MeshCollider
+                meshCollider.sharedMesh = mesh;
+            }*/
+            //SphereCollider sc = spiders[currentSpider].AddComponent<SphereCollider>() as SphereCollider;
+
             currentSpider++;
+            spiderInitiationFreq = randFreq();//Change the initiation frequency for next spider
         }
 
 
@@ -122,11 +147,16 @@ public class SpiderWave : MonoBehaviour
 
 
                 //Rotate spider side to side
-                if (spiderRotationTimer == 0)
+                spiderRotationTimer[i] += 1;
+                spiderRotationTimer[i] = spiderRotationTimer[i] % spiderBodyRotationFreq[i];
+
+                //if (spiderRotationTimer == 0)
+                if (spiderRotationTimer[i] == 0)
                 {
                     spiders[i].transform.Rotate(0, 180 * Time.deltaTime, 0);
                 }
-                if(spiderRotationTimer == spiderRotationFreq / 2)
+                //if(spiderRotationTimer == spiderRotationFreq / 2)
+                if (spiderRotationTimer[i] == spiderBodyRotationFreq[i] / 2)
                 {
                     spiders[i].transform.Rotate(0, -180 * Time.deltaTime, 0);
                 }
