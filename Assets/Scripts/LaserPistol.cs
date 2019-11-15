@@ -23,9 +23,9 @@ public class LaserPistol : MonoBehaviour
         {
 
             //Draw ray
-            Debug.DrawRay(transform.position, transform.forward * 10000, Color.red, 0.05f);
+            Debug.DrawRay(transform.position, transform.forward * 20, Color.red, 0.05f);
             //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 10000, Color.red, 0.05f);
-
+            
 
             //Play sound
             laserBurst = GetComponent<AudioSource>();
