@@ -4,25 +4,26 @@ using UnityEngine;
 
 public class SpiderWave : MonoBehaviour
 {
+    
+    public TrackHealth trackHealth;
     public System.Random rnd = new System.Random();
     int numSpiders;
     int spiderInitiationTimer;
-    //int spiderRotationTimer;
     int currentSpider;
     int spiderInitiationFreq;
-    //int spiderRotationFreq;
 
     public GameObject house;
     public GameObject player;
 
     public GameObject spiderPrefab;
-    //AudioSource spiderAppearSound;
 
     GameObject[] spiders;
     float[] spiderMoveSpeed;
     int[] spiderBodyRotationFreq;
     int[] spiderRotationTimer;
-    //GameObject spider1;
+    float killRadius;
+    //public int hits;
+    float hitPenalty;
 
 
     int randFreq()
@@ -35,17 +36,16 @@ public class SpiderWave : MonoBehaviour
     {
         numSpiders = 40;
         spiderInitiationTimer = 0;
-        //spiderRotationTimer = 0;
         currentSpider = 0;
         spiderInitiationFreq = randFreq(); 
-        //spiderRotationFreq = 10;
 
         spiders = new GameObject[numSpiders];
         spiderMoveSpeed = new float[numSpiders];
         spiderBodyRotationFreq = new int[numSpiders];
         spiderRotationTimer = new int[numSpiders];
-
-        //spiderAppearSound = gameObject.GetComponent<AudioSource>();
+        killRadius = 50f;
+        //hits = 0;
+        hitPenalty = 4f;
 
     }
 
@@ -56,8 +56,6 @@ public class SpiderWave : MonoBehaviour
         spiderInitiationTimer += 1;
         spiderInitiationTimer = spiderInitiationTimer % spiderInitiationFreq;
 
-        //spiderRotationTimer += 1;
-        //spiderRotationTimer = spiderRotationTimer % spiderRotationFreq;
 
         if(spiderInitiationTimer == 0 && currentSpider < numSpiders)
         {
@@ -75,22 +73,6 @@ public class SpiderWave : MonoBehaviour
             spiderMoveSpeed[currentSpider] = moveSpeeed;
             spiderBodyRotationFreq[currentSpider] = rnd.Next(9, 15);//Random # btw 9 and 14
             spiderRotationTimer[currentSpider] = 0;
-
-            //spiders[currentSpider].transform.gameObject.AddComponent(MeshCollider);
-            //spiderAppearSound.Play();
-
-            //Mesh mesh = (MeshFilter)spiders[currentSpider].GetComponent<MeshFilter>().mesh;
-            /*Mesh mesh = spiderPrefab.GetComponent<MeshFilter>().mesh;
-            if (mesh != null)
-            {
-                // Add a new MeshCollider to the object
-                //MeshCollider meshCollider = spiders[currentSpider].AddComponent<MeshCollider>();
-                MeshCollider meshCollider = spiders[currentSpider].AddComponent<MeshCollider>();
-
-                // Finaly we set the Mesh in the MeshCollider
-                meshCollider.sharedMesh = mesh;
-            }*/
-            //SphereCollider sc = spiders[currentSpider].AddComponent<SphereCollider>() as SphereCollider;
 
             currentSpider++;
             spiderInitiationFreq = randFreq();//Change the initiation frequency for next spider
@@ -136,13 +118,22 @@ public class SpiderWave : MonoBehaviour
                     {
                         spiders[i].transform.Rotate(0, 0, orientAngle);
                     }*/
-                    
+
 
                     /*Reduce player health if spider gets to player*/
-                    if (x == playerX && z == playerZ)
+                    float xSeparation = System.Math.Abs(x - playerX);
+                    float zSeparation = System.Math.Abs(z - playerZ);
+
+                    if(xSeparation < killRadius && zSeparation < killRadius)
                     {
+                        //hits++;              
+                        Destroy(spiders[i]);
+                        //Debug.Log("spider " + i + " hit");
+                        //Debug.Log("hits: "+hits);
+                        trackHealth.takeHit(hitPenalty);
 
                     }
+
                 }
 
 
@@ -161,31 +152,9 @@ public class SpiderWave : MonoBehaviour
                     spiders[i].transform.Rotate(0, -180 * Time.deltaTime, 0);
                 }
 
-
-                
-
-                //Debug.Log("Player pos(" + playerX + ", " + playerY + ", " + playerZ + ")");
-                //Debug.Log("Spider " + i + " pos("+x+", "+y+", "+z+"): House y "+houseY);
             }
         }
 
-        /*timer += 1;
-        timer = timer % 999999;
 
-        if(timer == 1000)
-        {
-            Destroy(spiders[0]);
-        }
-
-        if (timer == 2000)
-        {
-            Destroy(spiders[1]);
-        }
-
-        if (timer == 3000)
-        {
-            Destroy(spiders[2]);
-        }*/
-        //Debug.Log("timer: " + timer);
     }
 }
