@@ -43,7 +43,7 @@ public class SpiderWave : MonoBehaviour
         spiderMoveSpeed = new float[numSpiders];
         spiderBodyRotationFreq = new int[numSpiders];
         spiderRotationTimer = new int[numSpiders];
-        killRadius = 50f;
+        killRadius = 30f;
         //hits = 0;
         hitPenalty = 4f;
 
