@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311912, g: 0.3807398, b: 0.3587271, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -401,6 +401,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 784938287}
+<<<<<<< HEAD
 --- !u!1 &193032602
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,6 +474,8 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 193032602}
   m_CullTransparentMesh: 0
+=======
+>>>>>>> 50d7d0f46e665d2020da8d829076f1cf86512a01
 --- !u!1 &281903519
 GameObject:
   m_ObjectHideFlags: 0
