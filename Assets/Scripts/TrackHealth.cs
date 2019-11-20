@@ -26,7 +26,7 @@ public class TrackHealth : MonoBehaviour
     {
         health -= hitLevel;
         adjustSlider();
-        Debug.Log("Hit "+health);
+        //Debug.Log("Hit "+health);
         if (health < 0.01)
         {
             Debug.Log("You died!");
