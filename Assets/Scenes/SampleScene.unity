@@ -400,6 +400,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba18a726b82995449a1bc024c47c4cad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spiderWave: {fileID: 0}
+  r: 0
   cam: {fileID: 784938287}
 --- !u!1 &193032602
 GameObject:
@@ -855,6 +857,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba18a726b82995449a1bc024c47c4cad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spiderWave: {fileID: 1157030074}
+  r: 0
   cam: {fileID: 784938287}
 --- !u!82 &758087217
 AudioSource:
@@ -1421,6 +1425,7 @@ MonoBehaviour:
   house: {fileID: 1177569010}
   player: {fileID: 172663587}
   spiderPrefab: {fileID: 499961965}
+  hits: 0
 --- !u!4 &1157030075
 Transform:
   m_ObjectHideFlags: 0

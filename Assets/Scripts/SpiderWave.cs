@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpiderWave : MonoBehaviour
 {
-    
+
     public TrackHealth trackHealth;
     public System.Random rnd = new System.Random();
     int numSpiders;
@@ -17,7 +17,7 @@ public class SpiderWave : MonoBehaviour
 
     public GameObject spiderPrefab;
 
-    GameObject[] spiders;
+    public GameObject[] spiders;
     float[] spiderMoveSpeed;
     int[] spiderBodyRotationFreq;
     int[] spiderRotationTimer;
@@ -37,7 +37,7 @@ public class SpiderWave : MonoBehaviour
         numSpiders = 40;
         spiderInitiationTimer = 0;
         currentSpider = 0;
-        spiderInitiationFreq = randFreq(); 
+        spiderInitiationFreq = randFreq();
 
         spiders = new GameObject[numSpiders];
         spiderMoveSpeed = new float[numSpiders];
@@ -57,7 +57,7 @@ public class SpiderWave : MonoBehaviour
         spiderInitiationTimer = spiderInitiationTimer % spiderInitiationFreq;
 
 
-        if(spiderInitiationTimer == 0 && currentSpider < numSpiders)
+        if (spiderInitiationTimer == 0 && currentSpider < numSpiders)
         {
             float posX = Random.Range(-400, 400);
             float posY = Random.Range(0, 50);
@@ -80,9 +80,9 @@ public class SpiderWave : MonoBehaviour
 
 
         //Move spiders
-        for(int i = 0; i < spiders.Length; i++)
+        for (int i = 0; i < spiders.Length; i++)
         {
-            if(spiders[i] != null)
+            if (spiders[i] != null)
             {
                 float x = spiders[i].transform.position.x;
                 float y = spiders[i].transform.position.y;
@@ -90,13 +90,13 @@ public class SpiderWave : MonoBehaviour
                 float houseY = house.transform.position.y;
 
                 //Move spider to floor level
-                if(y > houseY)
+                if (y > houseY)
                 {
                     y -= 0.4f;
                     spiders[i].transform.position = new Vector3(x, y, z);
                 }
 
-                
+
                 float playerX = player.transform.position.x;
                 float playerY = player.transform.position.y;
                 float playerZ = player.transform.position.z;
@@ -108,7 +108,7 @@ public class SpiderWave : MonoBehaviour
                     float dz = playerZ - z;
                     x += dx * spiderMoveSpeed[i];
                     z += dz * spiderMoveSpeed[i];
-                 
+
                     spiders[i].transform.position = new Vector3(x, y, z);
 
                     //Orient spider with the direction vector of its forward movement vector (dx, y, dz)
@@ -124,12 +124,9 @@ public class SpiderWave : MonoBehaviour
                     float xSeparation = System.Math.Abs(x - playerX);
                     float zSeparation = System.Math.Abs(z - playerZ);
 
-                    if(xSeparation < killRadius && zSeparation < killRadius)
-                    {
-                        //hits++;              
+                    if (xSeparation < killRadius && zSeparation < killRadius)
+                    {            
                         Destroy(spiders[i]);
-                        //Debug.Log("spider " + i + " hit");
-                        //Debug.Log("hits: "+hits);
                         trackHealth.takeHit(hitPenalty);
 
                     }
@@ -157,4 +154,5 @@ public class SpiderWave : MonoBehaviour
 
 
     }
+
 }
