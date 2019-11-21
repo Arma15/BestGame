@@ -10,6 +10,8 @@ public class SpiderWave : MonoBehaviour
     int numSpiders;
     int spiderInitiationTimer;
     int currentSpider;
+    public int minInitiationFreq;
+    public int maxInitiationFreq;
     int spiderInitiationFreq;
 
     public GameObject house;
@@ -24,20 +26,26 @@ public class SpiderWave : MonoBehaviour
     float killRadius;
     //public int hits;
     float hitPenalty;
+    public int level;
+    public float moveSpeedMin;
+    public float moveSppedMax;
 
 
-    int randFreq()
+    int randFreq(int min, int max)
     {
-        return rnd.Next(90, 180);
+        return rnd.Next(min, max);
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        level = 1;
         numSpiders = 40;
         spiderInitiationTimer = 0;
         currentSpider = 0;
-        spiderInitiationFreq = randFreq();
+        minInitiationFreq = 90;
+        maxInitiationFreq = 180;
+        spiderInitiationFreq = randFreq(minInitiationFreq, maxInitiationFreq);//For first spider
 
         spiders = new GameObject[numSpiders];
         spiderMoveSpeed = new float[numSpiders];
@@ -46,6 +54,8 @@ public class SpiderWave : MonoBehaviour
         killRadius = 30f;
         //hits = 0;
         hitPenalty = 4f;
+        moveSpeedMin = 0.001f;
+        moveSppedMax = 0.005f;
 
     }
 
@@ -56,7 +66,35 @@ public class SpiderWave : MonoBehaviour
         spiderInitiationTimer += 1;
         spiderInitiationTimer = spiderInitiationTimer % spiderInitiationFreq;
 
+        spiderAction();
 
+        if(spiders.Length == 0)
+        {
+            level++;
+            //Print next level Not so fast kido, prepare for meaner spiders!!
+            //currentSpider = 0;
+            //spiderInitiationTimer = 0;
+
+            if (level == 2)
+            {
+                numSpiders = 50;
+               
+                minInitiationFreq = 100;
+                maxInitiationFreq = 190;
+                spiderInitiationFreq = randFreq(minInitiationFreq, maxInitiationFreq);//For first spider
+
+
+                killRadius = 30f;
+                hitPenalty = 5f;
+                moveSpeedMin = 0.003f;
+                moveSppedMax = 0.007f;
+            }
+        }
+    }
+
+
+    void spiderAction()
+    {
         if (spiderInitiationTimer == 0 && currentSpider < numSpiders)
         {
             float posX = Random.Range(-400, 400);
@@ -75,7 +113,7 @@ public class SpiderWave : MonoBehaviour
             spiderRotationTimer[currentSpider] = 0;
 
             currentSpider++;
-            spiderInitiationFreq = randFreq();//Change the initiation frequency for next spider
+            spiderInitiationFreq = randFreq(minInitiationFreq, maxInitiationFreq);//Change the initiation frequency for next spider
         }
 
 
@@ -125,7 +163,7 @@ public class SpiderWave : MonoBehaviour
                     float zSeparation = System.Math.Abs(z - playerZ);
 
                     if (xSeparation < killRadius && zSeparation < killRadius)
-                    {            
+                    {
                         Destroy(spiders[i]);
                         trackHealth.takeHit(hitPenalty);
 
@@ -151,8 +189,6 @@ public class SpiderWave : MonoBehaviour
 
             }
         }
-
-
     }
 
 }
