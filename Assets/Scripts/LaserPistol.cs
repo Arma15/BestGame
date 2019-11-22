@@ -44,6 +44,7 @@ public class LaserPistol : MonoBehaviour
                 //Kill spider
                 //Debug.Log("Hit " + hit.collider.gameObject.name);
                 //Destroy(hit.collider.gameObject);
+                spiderWave.numSpidersLeft--;
                 Destroy(hit.collider.gameObject.transform.parent.gameObject);
 
                 /*for (int i = 0; i < spiderWave.spiders.Length; i++) {

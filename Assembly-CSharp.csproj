@@ -61,6 +61,7 @@
      <Compile Include="Assets\Scripts\Old Scripts\MainCam.cs" />
      <Compile Include="Assets\Scripts\Old Scripts\Spiders.cs" />
      <Compile Include="Assets\Scripts\SpiderWave.cs" />
+     <Compile Include="Assets\Scripts\TextDisplay.cs" />
      <Compile Include="Assets\Scripts\TrackHealth.cs" />
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>C:/Users/Owner/Documents/GitHub/BestGame/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>

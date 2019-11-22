@@ -6,8 +6,11 @@ public class SpiderWave : MonoBehaviour
 {
 
     public TrackHealth trackHealth;
+    public TextDisplay textDisplay;
     public System.Random rnd = new System.Random();
-    int numSpiders;
+    int origNumSpiders;
+    public int numSpidersLeft;
+    public int maxNumSpiders = 80;
     int spiderInitiationTimer;
     int currentSpider;
     public int minInitiationFreq;
@@ -30,6 +33,8 @@ public class SpiderWave : MonoBehaviour
     public float moveSpeedMin;
     public float moveSppedMax;
 
+    AudioSource grunt;
+
 
     int randFreq(int min, int max)
     {
@@ -40,22 +45,25 @@ public class SpiderWave : MonoBehaviour
     void Start()
     {
         level = 1;
-        numSpiders = 40;
+        origNumSpiders = 40;
+        numSpidersLeft = origNumSpiders;
         spiderInitiationTimer = 0;
         currentSpider = 0;
-        minInitiationFreq = 90;
-        maxInitiationFreq = 180;
+        minInitiationFreq = 60;
+        maxInitiationFreq = 110;
         spiderInitiationFreq = randFreq(minInitiationFreq, maxInitiationFreq);//For first spider
 
-        spiders = new GameObject[numSpiders];
-        spiderMoveSpeed = new float[numSpiders];
-        spiderBodyRotationFreq = new int[numSpiders];
-        spiderRotationTimer = new int[numSpiders];
+        spiders = new GameObject[maxNumSpiders];
+        spiderMoveSpeed = new float[maxNumSpiders];
+        spiderBodyRotationFreq = new int[maxNumSpiders];
+        spiderRotationTimer = new int[maxNumSpiders];
         killRadius = 30f;
         //hits = 0;
         hitPenalty = 4f;
         moveSpeedMin = 0.001f;
         moveSppedMax = 0.005f;
+
+        grunt = GetComponent<AudioSource>();
 
     }
 
@@ -63,31 +71,46 @@ public class SpiderWave : MonoBehaviour
     void Update()
     {
 
-        spiderInitiationTimer += 1;
-        spiderInitiationTimer = spiderInitiationTimer % spiderInitiationFreq;
+        if (!textDisplay.paused)
+        {
+            spiderInitiationTimer += 1;
+            spiderInitiationTimer = spiderInitiationTimer % spiderInitiationFreq;
 
-        spiderAction();
+            spiderAction();
+            //Debug.Log("num spiders left "+numSpidersLeft);
+        }
 
-        if(spiders.Length == 0)
+
+        if (numSpidersLeft == 0)
         {
             level++;
-            //Print next level Not so fast kido, prepare for meaner spiders!!
-            //currentSpider = 0;
+            //Print next level 
+            //Debug.Log("Level " + level);
+            currentSpider = 0;
             //spiderInitiationTimer = 0;
 
             if (level == 2)
             {
-                numSpiders = 50;
-               
-                minInitiationFreq = 100;
-                maxInitiationFreq = 190;
+                textDisplay.transitionLevel("Not so fast kido, prepare for meaner spiders!!");
+                textDisplay.pause(500);
+                origNumSpiders = 50;   
+                numSpidersLeft = origNumSpiders;
+      
+                minInitiationFreq = 30;
+                maxInitiationFreq = 80;
                 spiderInitiationFreq = randFreq(minInitiationFreq, maxInitiationFreq);//For first spider
 
 
                 killRadius = 30f;
                 hitPenalty = 5f;
-                moveSpeedMin = 0.003f;
-                moveSppedMax = 0.007f;
+                moveSpeedMin = 0.004f;
+                moveSppedMax = 0.008f;
+            }
+
+            if(level == 3)
+            {
+                textDisplay.gameOver("Game Over!!");
+                textDisplay.pause(2000);
             }
         }
     }
@@ -95,7 +118,8 @@ public class SpiderWave : MonoBehaviour
 
     void spiderAction()
     {
-        if (spiderInitiationTimer == 0 && currentSpider < numSpiders)
+        //Spawn new spider
+        if (spiderInitiationTimer == 0 && currentSpider < origNumSpiders)
         {
             float posX = Random.Range(-400, 400);
             float posY = Random.Range(0, 50);
@@ -103,7 +127,6 @@ public class SpiderWave : MonoBehaviour
 
             float[] zRoomBounds = new float[2] { -350, 400 };
             int indexZ = rnd.Next(0, 2);//Random # btw 0 and 1
-            //Debug.Log(indexZ);
             float posZ = zRoomBounds[indexZ];
 
             spiders[currentSpider] = Instantiate(spiderPrefab, new Vector3(posX, posY, posZ), Quaternion.Euler(-76.095f, -0.195f, -31.17f)) as GameObject;
@@ -165,6 +188,8 @@ public class SpiderWave : MonoBehaviour
                     if (xSeparation < killRadius && zSeparation < killRadius)
                     {
                         Destroy(spiders[i]);
+                        numSpidersLeft--;
+                        grunt.Play(0);//Play grunt sound
                         trackHealth.takeHit(hitPenalty);
 
                     }
