@@ -7,12 +7,14 @@ public class LaserPistol : MonoBehaviour
     public SpiderWave spiderWave;
     AudioSource laserBurst;
     public Camera cam;									// camera reference with the ray
-	
+	private LineRenderer laserLine; 					// laser line
+	public Transform gunNozzle;
     // Start is called before the first frame update
     void Start()
     {
 		cam = Camera.main;								// get the camera object pointer (using main camera tag here)
 		laserBurst = GetComponent<AudioSource>();
+		laserLine = GetComponent<LineRenderer>();
     }
 
     // Update is called once per frame
@@ -25,6 +27,11 @@ public class LaserPistol : MonoBehaviour
             //Debug.DrawRay(transform.position, transform.forward * 20, Color.red, 0.05f);
             //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 10000, Color.red, 0.05f);
             
+			// start the shot effect (line and explosion)
+			StartCoroutine (ShotEffect());
+			// render the laser line
+			laserLine.SetPosition(0, gunNozzle.position);
+			
             //Play sound
             laserBurst.Play(0);
 			
@@ -40,7 +47,10 @@ public class LaserPistol : MonoBehaviour
                 //Debug.Log("Hit " + hit.collider.gameObject.name+" at distance " + hit.distance);
 
                 //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.red, 0.05f);
-
+				
+				// set the end point of the line
+				laserLine.SetPosition (1, hit.point);
+				
                 //Kill spider
                 //Debug.Log("Hit " + hit.collider.gameObject.name);
                 //Destroy(hit.collider.gameObject);
@@ -59,6 +69,24 @@ public class LaserPistol : MonoBehaviour
                 }*/
 
             }
+			else
+			{
+				// if laser line does not hit
+				laserLine.enabled = false;
+			}
         }
+    }
+	
+	private IEnumerator ShotEffect()
+    {
+
+        // Turn on our line renderer
+        laserLine.enabled = true;
+
+        //Wait for 1 second
+        yield return 1.0f;
+
+        // Deactivate our line renderer after waiting
+        laserLine.enabled = false;
     }
 }
