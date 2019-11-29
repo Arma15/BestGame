@@ -93,9 +93,9 @@ public class SpiderWave : MonoBehaviour
             {
                 textDisplay.transitionLevel("Not so fast kido, prepare for meaner spiders!!");
                 textDisplay.pause(500);
-                origNumSpiders = 50;   
+                origNumSpiders = 50;
                 numSpidersLeft = origNumSpiders;
-      
+
                 minInitiationFreq = 30;
                 maxInitiationFreq = 80;
                 spiderInitiationFreq = randFreq(minInitiationFreq, maxInitiationFreq);//For first spider
@@ -107,7 +107,7 @@ public class SpiderWave : MonoBehaviour
                 moveSppedMax = 0.008f;
             }
 
-            if(level == 3)
+            if (level == 3)
             {
                 textDisplay.gameOver("Game Over!!");
                 textDisplay.pause(2000);
@@ -121,17 +121,30 @@ public class SpiderWave : MonoBehaviour
         //Spawn new spider
         if (spiderInitiationTimer == 0 && currentSpider < origNumSpiders)
         {
-            float posX = Random.Range(-400, 400);
-            float posY = Random.Range(0, 50);
-            float moveSpeeed = Random.Range(0.001f, 0.005f);
+            int wall = rnd.Next(0, 2);//Random # btw 0 and 1 for x walls or z walls
+            float posX;
+            float posZ;
 
-            float[] zRoomBounds = new float[2] { -350, 400 };
-            int indexZ = rnd.Next(0, 2);//Random # btw 0 and 1
-            float posZ = zRoomBounds[indexZ];
+            if (wall == 0)
+            {//If z walls
+                posX = Random.Range(-400, 400);
+                float[] zRoomBounds = new float[2] { -350, 400 };
+                int indexZ = rnd.Next(0, 2);//Random # btw 0 and 1
+                posZ = zRoomBounds[indexZ];
+            }
+            else
+            {//If x walls
+                posZ = Random.Range(-400, 400);
+                float[] xRoomBounds = new float[2] { -350, 400 };
+                int indexX = rnd.Next(0, 2);//Random # btw 0 and 1
+                posX = xRoomBounds[indexX];
+            }
+            float posY = Random.Range(0, 50);
+            float moveSpeed = Random.Range(0.001f, 0.005f);
 
             spiders[currentSpider] = Instantiate(spiderPrefab, new Vector3(posX, posY, posZ), Quaternion.Euler(-76.095f, -0.195f, -31.17f)) as GameObject;
             spiders[currentSpider].transform.localScale = new Vector3(10, 10, 10);
-            spiderMoveSpeed[currentSpider] = moveSpeeed;
+            spiderMoveSpeed[currentSpider] = moveSpeed;
             spiderBodyRotationFreq[currentSpider] = rnd.Next(9, 15);//Random # btw 9 and 14
             spiderRotationTimer[currentSpider] = 0;
 
@@ -149,6 +162,15 @@ public class SpiderWave : MonoBehaviour
                 float y = spiders[i].transform.position.y;
                 float z = spiders[i].transform.position.z;
                 float houseY = house.transform.position.y;
+                float playerX = player.transform.position.x;
+                float playerY = player.transform.position.y;
+                float playerZ = player.transform.position.z;
+
+                float dx = playerX - x;
+                float dz = playerZ - z;
+                Vector3 dirVector = new Vector3(dx, y, dz);
+                //Orient spider with the direction vector of its forward movement vector (dx, y, dz)
+                spiders[i].transform.rotation = Quaternion.LookRotation(dirVector);
 
                 //Move spider to floor level
                 if (y > houseY)
@@ -158,27 +180,14 @@ public class SpiderWave : MonoBehaviour
                 }
 
 
-                float playerX = player.transform.position.x;
-                float playerY = player.transform.position.y;
-                float playerZ = player.transform.position.z;
-
                 //Move spider towards player
                 if (y <= houseY)
                 {
-                    float dx = playerX - x;
-                    float dz = playerZ - z;
+
                     x += dx * spiderMoveSpeed[i];
                     z += dz * spiderMoveSpeed[i];
 
                     spiders[i].transform.position = new Vector3(x, y, z);
-
-                    //Orient spider with the direction vector of its forward movement vector (dx, y, dz)
-                    /*float orientAngle = Mathf.Atan2(dz, dx) * Mathf.Rad2Deg;
-                    float d = 0.000001f;
-                    if(spiders[i].transform.rotation.eulerAngles.y > (orientAngle - d) || spiders[i].transform.rotation.eulerAngles.y < (orientAngle + d))
-                    {
-                        spiders[i].transform.Rotate(0, 0, orientAngle);
-                    }*/
 
 
                     /*Reduce player health if spider gets to player*/

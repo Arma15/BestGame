@@ -3,14 +3,14 @@ guid: f038ee89962efa24786cdaeb79c9eb31
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: 18754_Spider_in_defensive_stance
-    100002: //RootNode
-    400000: 18754_Spider_in_defensive_stance
-    400002: //RootNode
-    2100000: 18754_Spider_in_defensive_stanceMat
-    2300000: 18754_Spider_in_defensive_stance
-    3300000: 18754_Spider_in_defensive_stance
-    4300000: 18754_Spider_in_defensive_stance
+    100000: //RootNode
+    100002: default
+    400000: //RootNode
+    400002: default
+    2100000: defaultMat
+    2300000: default
+    3300000: default
+    4300000: default
   externalObjects: {}
   materials:
     importMaterials: 1

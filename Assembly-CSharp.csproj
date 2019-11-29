@@ -60,6 +60,7 @@
      <Compile Include="Assets\Scripts\Old Scripts\LaserGun.cs" />
      <Compile Include="Assets\Scripts\Old Scripts\MainCam.cs" />
      <Compile Include="Assets\Scripts\Old Scripts\Spiders.cs" />
+     <Compile Include="Assets\Scripts\SkeletonWave.cs" />
      <Compile Include="Assets\Scripts\SpiderWave.cs" />
      <Compile Include="Assets\Scripts\TextDisplay.cs" />
      <Compile Include="Assets\Scripts\TrackHealth.cs" />
