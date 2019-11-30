@@ -65,6 +65,7 @@ public class TextDisplay : MonoBehaviour
 
         if(timer == pauseTime)
         {
+            timer = 0;
             pauseTime = 0;
             paused = false;
 

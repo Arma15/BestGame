@@ -5,6 +5,7 @@ using UnityEngine;
 public class LaserPistol : MonoBehaviour
 {
     public SpiderWave spiderWave;
+    public SkeletonWave skeletonWave;
     AudioSource laserBurst;
     public Camera cam;									// camera reference with the ray
 	private LineRenderer laserLine; 					// laser line
@@ -54,8 +55,21 @@ public class LaserPistol : MonoBehaviour
                 //Kill spider
                 //Debug.Log("Hit " + hit.collider.gameObject.name);
                 //Destroy(hit.collider.gameObject);
-                spiderWave.numSpidersLeft--;
-                Destroy(hit.collider.gameObject.transform.parent.gameObject);
+
+                if(hit.collider.gameObject.name == "spider")
+                {
+                    //Debug.Log("Hit spider");
+                    spiderWave.numSpidersLeft--;
+                    Destroy(hit.collider.gameObject.transform.parent.gameObject);
+                }
+                else
+                {
+                    //Debug.Log("Hit skeleton");
+                    //skeletonWave.numSkeletonsLeft--;
+                    Destroy(hit.collider.gameObject.transform.parent.gameObject.transform.parent.gameObject);
+                    //Destroy(hit.collider.gameObject.transform.parent.gameObject);
+                }
+
 
                 /*for (int i = 0; i < spiderWave.spiders.Length; i++) {
                     if (spiderWave.spiders[i] != null)

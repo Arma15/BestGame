@@ -23,6 +23,10 @@ public class SkeletonWave : MonoBehaviour
 
     }
 
+    public TrackHealth trackHealth;
+    public TextDisplay textDisplay;
+    public SpiderWave spiderWave;
+
     public System.Random rnd = new System.Random();
     int maxNumSkeletons;
     int origNumSkeletons;
@@ -39,6 +43,8 @@ public class SkeletonWave : MonoBehaviour
     public GameObject skeletonPrefab;
     public GameObject player;
     public GameObject gun;
+    int sceneTransitionSettings;
+    public Collider playerCollider;
 
     //int[] skeletonRotationFreq;
     //int[] skeletonRotationTimer;
@@ -68,14 +74,17 @@ public class SkeletonWave : MonoBehaviour
         minInitiationFreq = 60;
         maxInitiationFreq = 110;
         skeletonInitiationFreq = randFreq(minInitiationFreq, maxInitiationFreq);//For first skeleton
+        sceneTransitionSettings = 0;
 
+        playerCollider = GetComponent<Collider>();
 
-        for(int i = 0; i < origNumSkeletons; i++)
+        for (int i = 0; i < origNumSkeletons; i++)
         {
             skeletons[i].rotationTimer = 0;
-            skeletons[i].rotationFreq = randFreq(20, 60);
+            //skeletons[i].rotationFreq = randFreq(20, 60);
+            skeletons[i].rotationFreq = randFreq(10, 30);
             skeletons[i].rightArmDir = 0;
-            skeletons[i].translateSpeed = skeletons[0].rotationFreq / 3000f;
+            skeletons[i].translateSpeed = skeletons[0].rotationFreq / 1000f;
         }
         /*skeletons[0].rotationTimer = 0;
         skeletons[0].rotationFreq = 60;
@@ -105,13 +114,22 @@ public class SkeletonWave : MonoBehaviour
         //int i = 0;
         //skeletonRotationTimer[i] += 1;
         //skeletonRotationTimer[i] = skeletonRotationTimer[i] % skeletonRotationFreq[i];
-
-        //if (!textDisplay.paused)
-        if (true)
+//Debug.Log("text display paused: " + textDisplay.paused + " level: " + spiderWave.level);
+        if (!textDisplay.paused && spiderWave.level == 3)
         {
+            if(sceneTransitionSettings == 0)
+            {//Sets the scene once
+                //playerCollider.enabled = false;//Disable collider to allow player move outside
+                //player.GetComponent(CharacterCollider).isTrigger = false;
+                //player.transform.position = new Vector3(627, 160, 399.84f);
+                //player.transform.rotation = Quaternion.Euler(0, -253.4f, 0);
+                //sceneTransitionSettings++;
+            }
+
+
             skeletonInitiationTimer += 1;
             skeletonInitiationTimer = skeletonInitiationTimer % skeletonInitiationFreq;
-
+//Debug.Log("timer " + skeletonInitiationTimer);
             skeletonInitiation();
             //Debug.Log("num spiders left "+numSpidersLeft);
         }
@@ -123,7 +141,7 @@ public class SkeletonWave : MonoBehaviour
 
         for (int i = 0; i < origNumSkeletons; i++)
         {
-            if(skeletons[i].clone != null)
+            if (skeletons[i].clone != null)
             {
                 skeletons[i].rotationTimer += 1;
                 skeletons[i].rotationTimer = skeletons[i].rotationTimer % skeletons[i].rotationFreq;
@@ -183,7 +201,7 @@ public class SkeletonWave : MonoBehaviour
 
         //if (angleBetweenDirVectorAndForward < 1 || angleBetweenDirVectorAndForward > 11)
         //{
-            //skeletons[i].clone.transform.rotation = Quaternion.Euler(skeletons[i].clone.transform.rotation.eulerAngles.x, skeletons[i].clone.transform.rotation.eulerAngles.y - 10, skeletons[i].clone.transform.rotation.eulerAngles.z);
+        //skeletons[i].clone.transform.rotation = Quaternion.Euler(skeletons[i].clone.transform.rotation.eulerAngles.x, skeletons[i].clone.transform.rotation.eulerAngles.y - 10, skeletons[i].clone.transform.rotation.eulerAngles.z);
         //}
 
 
@@ -217,10 +235,10 @@ public class SkeletonWave : MonoBehaviour
         //skeletons[i].z += dz * skeletons[i].translateSpeed;
 
 
-//Debug.Log("("+x+","+y+","+z+")");
+        //Debug.Log("("+x+","+y+","+z+")");
         //skeletons[i].clone.transform.position = new Vector3(skeletons[i].x, skeletons[i].y, skeletons[i].z);
 
-       
+
 
 
         /*if (skeletons[i].rotationTimer == 0)
@@ -274,7 +292,7 @@ public class SkeletonWave : MonoBehaviour
             float posZ = Random.Range(-400, 400);
             skeletons[currentSkeleton].clone = Instantiate(skeletonPrefab, new Vector3(posX, posY, posZ), Quaternion.Euler(0, 0, 0)) as GameObject;
             //skeletons[currentSkeleton].clone.transform.position = new Vector3(skeletons[currentSkeleton].clone.transform.position.x, skeletons[currentSkeleton].clone.transform.position.y - 50, skeletons[currentSkeleton].clone.transform.position.z);
-            skeletons[currentSkeleton].clone.transform.localScale = new Vector3(2, 2, 2);
+            skeletons[currentSkeleton].clone.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
 
             currentSkeleton++;
             skeletonInitiationFreq = randFreq(minInitiationFreq, maxInitiationFreq);//Change the initiation frequency for next skeleton
@@ -284,7 +302,7 @@ public class SkeletonWave : MonoBehaviour
 
 
 
-    void moveBones(int i, Vector3 dirVector, float dx, float dz)
+    void moveBones1(int i, Vector3 dirVector, float dx, float dz)
     {
 
 
@@ -422,6 +440,237 @@ public class SkeletonWave : MonoBehaviour
     }
 
 
+
+
+    void moveBones(int i, Vector3 dirVector, float dx, float dz)
+    {
+
+
+        if (skeletons[i].clone != null)
+        {
+            if (skeletons[i].rotationTimer == 0)
+            {
+
+                for (int j = 0; j <= 7; j++)
+                {
+                    if (skeletons[i].clone.transform.GetChild(j) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(j).transform.GetChild(0).rotation = Quaternion.LookRotation(dirVector);
+                    }
+                }
+                //skeletons[i].clone.transform.rotation = Quaternion.LookRotation(dirVector);
+
+
+
+
+                if (skeletons[i].rightArmDir == 0)
+                {
+                    //Debug.Log("Phase1 forward");
+                    //Right arm 
+                    if (skeletons[i].clone.transform.GetChild(2) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(2).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 8);
+                    }
+                    //Left arm
+                    if (skeletons[i].clone.transform.GetChild(7) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(7).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 8);
+                    }
+                    //Right humerus
+                    if (skeletons[i].clone.transform.GetChild(3) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(3).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 8, transform.rotation.eulerAngles.z);
+                    }
+                    //Right lower leg in tandem with right humerus
+                    if (skeletons[i].clone.transform.GetChild(4) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(4).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 9, transform.rotation.eulerAngles.z);
+                    }
+                    //Left humerus
+                    if (skeletons[i].clone.transform.GetChild(0) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(0).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 8, transform.rotation.eulerAngles.z);
+                    }
+                    //Skull
+                    if (skeletons[i].clone.transform.GetChild(5) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(5).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 1);
+                    }
+
+                    //Sternum-hip
+                    if (skeletons[i].clone.transform.GetChild(6) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(6).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 1);
+                    }
+
+                }
+                else if (skeletons[i].rightArmDir == 1)
+                {
+                    //Debug.Log("Phase1 backward");
+                    //Right arm 
+                    if (skeletons[i].clone.transform.GetChild(2) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(2).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 8);
+                    }
+                    //Left arm
+                    if (skeletons[i].clone.transform.GetChild(7) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(7).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 8);
+                    }
+                    //Right humerus
+                    if (skeletons[i].clone.transform.GetChild(3) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(3).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 8, transform.rotation.eulerAngles.z);
+                    }
+                    //Left humerus
+                    if (skeletons[i].clone.transform.GetChild(0) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(0).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 8, transform.rotation.eulerAngles.z);
+                    }
+                    //Left lower leg in tandem with left humerus
+                    if (skeletons[i].clone.transform.GetChild(1) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(1).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 9, transform.rotation.eulerAngles.z);
+                    }
+                    //Skull
+                    if (skeletons[i].clone.transform.GetChild(5) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(5).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 1);
+                    }
+                    //Sternum-hip
+                    if (skeletons[i].clone.transform.GetChild(6) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(6).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 1);
+
+                    }
+                }
+
+                //Translate skeleton
+                translateSkeleton(i, dx, dz);
+
+            }
+
+
+            if (skeletons[i].rotationTimer == skeletons[i].rotationFreq / 2)
+            {//Return to neutral position
+
+                for (int j = 0; j <= 7; j++)
+                {
+                    //skeletons[i].clone.transform.GetChild(j).rotation = Quaternion.LookRotation(dirVector);
+                    if (skeletons[i].clone.transform.GetChild(j) != null)
+                    {
+                        Debug.Log(j + " alive");
+                        skeletons[i].clone.transform.GetChild(j).transform.GetChild(0).rotation = Quaternion.LookRotation(dirVector);
+                    }
+                    else
+                    {
+                        Debug.Log(j + " dead");
+                    }
+                    //Debug.Log(skeletons[i].clone.transform.GetChild(j).transform.GetChild(0).name);
+                    //skeletons[i].clone.transform.GetChild(j).rotation = Quaternion.FromToRotation(Vector3.forward, dirVector);
+
+                }
+                //skeletons[i].clone.transform.rotation = Quaternion.LookRotation(dirVector);
+                //skeletons[i].clone.transform.rotation = Quaternion.FromToRotation(Vector3.forward, dirVector);
+
+                if (skeletons[i].rightArmDir == 0)
+                {
+                    //Debug.Log("Phase2 forward");
+                    //Right arm 
+                    if (skeletons[i].clone.transform.GetChild(2) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(2).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 8);
+                    }
+                    //Left arm
+                    if (skeletons[i].clone.transform.GetChild(7) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(7).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 8);
+                    }
+                    //Right humerus
+                    if (skeletons[i].clone.transform.GetChild(3) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(3).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 8, transform.rotation.eulerAngles.z);
+                    }
+                    //Left humerus
+                    if (skeletons[i].clone.transform.GetChild(0) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(0).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 8, transform.rotation.eulerAngles.z);
+                    }
+                    //Left lower leg in tandem with left humerus
+                    //skeletons[i].clone.transform.GetChild(1).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x-8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+                    //Right lower leg back to neutral
+                    if (skeletons[i].clone.transform.GetChild(4) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(4).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 9, transform.rotation.eulerAngles.z);
+                    }
+
+                    //Skull
+                    if (skeletons[i].clone.transform.GetChild(5) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(5).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 1);
+                    }
+
+                    //Sternum-hip
+                    if (skeletons[i].clone.transform.GetChild(6) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(6).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 1);
+                    }
+                    skeletons[i].rightArmDir = 1;
+
+                }
+                else if (skeletons[i].rightArmDir == 1)
+                {
+                    //Debug.Log("Phase2 backward");
+                    //Right arm 
+                    if (skeletons[i].clone.transform.GetChild(2) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(2).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 8);
+                    }
+                    //Left arm
+                    if (skeletons[i].clone.transform.GetChild(7) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(7).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 8);
+                    }
+                    //Right humerus
+                    if (skeletons[i].clone.transform.GetChild(3) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(3).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x - 8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+                    }
+                    //Right lower leg in tandem with right humerus
+                    //skeletons[i].clone.transform.GetChild(4).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x-8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+                    //Left lower leg back to neutral
+                    if (skeletons[i].clone.transform.GetChild(1) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(1).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 9, transform.rotation.eulerAngles.z);
+                    }
+                    //Left humerus
+                    if (skeletons[i].clone.transform.GetChild(0) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(0).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 8, transform.rotation.eulerAngles.z);
+                    }
+                    //Skull
+                    if (skeletons[i].clone.transform.GetChild(5) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(5).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 1);
+                    }
+                    //Sternum-hip
+                    if (skeletons[i].clone.transform.GetChild(6) != null)
+                    {
+                        skeletons[i].clone.transform.GetChild(6).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 1);
+                    }
+                    skeletons[i].rightArmDir = 0;
+                }
+
+                //Translate skeleton
+                translateSkeleton(i, dx, dz);
+            }
+
+        }
+
+
+    }
+
+
     void translateSkeleton(int i, float dx, float dz)
     {
 
@@ -433,105 +682,5 @@ public class SkeletonWave : MonoBehaviour
         //Debug.Log(skeletons[i].clone.transform.position.x);
     }
 
-
-    void moveBones1(int i)
-    {
-        if (skeletons[i].rotationTimer == 0)
-        {
-
-            if (skeletons[i].rightArmDir == 0)
-            {
-                //Debug.Log("Phase1 forward");
-                //Right arm 
-                skeletons[i].clone.transform.GetChild(2).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 8);
-                //Left arm
-                skeletons[i].clone.transform.GetChild(7).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 8);
-                //Right humerus
-                skeletons[i].clone.transform.GetChild(3).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y - 8, transform.rotation.eulerAngles.z);
-                //Right lower leg in tandem with right humerus
-                skeletons[i].clone.transform.GetChild(4).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y - 9, transform.rotation.eulerAngles.z);
-                //Left humerus
-                skeletons[i].clone.transform.GetChild(0).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y + 8, transform.rotation.eulerAngles.z);
-                //Skull
-                skeletons[i].clone.transform.GetChild(5).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x + 8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-
-                //Sternum-hip
-                skeletons[i].clone.transform.GetChild(6).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x - 1, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-
-
-            }
-            else if (skeletons[i].rightArmDir == 1)
-            {
-                //Debug.Log("Phase1 backward");
-                //Right arm 
-                skeletons[i].clone.transform.GetChild(2).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 8);
-                //Left arm
-                skeletons[i].clone.transform.GetChild(7).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 8);
-                //Right humerus
-                skeletons[i].clone.transform.GetChild(3).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y + 8, transform.rotation.eulerAngles.z);
-                //Left humerus
-                skeletons[i].clone.transform.GetChild(0).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y - 8, transform.rotation.eulerAngles.z);
-                //Left lower leg in tandem with left humerus
-                skeletons[i].clone.transform.GetChild(1).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y - 9, transform.rotation.eulerAngles.z);
-                //Skull
-                skeletons[i].clone.transform.GetChild(5).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x - 8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-
-                //Sternum-hip
-                skeletons[i].clone.transform.GetChild(6).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x + 1, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-            }
-
-        }
-
-
-        if (skeletons[i].rotationTimer == skeletons[i].rotationFreq / 2)
-        {//Return to neutral position
-            if (skeletons[i].rightArmDir == 0)
-            {
-                //Debug.Log("Phase2 forward");
-                //Right arm 
-                skeletons[i].clone.transform.GetChild(2).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 8);
-                //Left arm
-                skeletons[i].clone.transform.GetChild(7).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 8);
-                //Right humerus
-                skeletons[i].clone.transform.GetChild(3).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y + 8, transform.rotation.eulerAngles.z);
-                //Left humerus
-                skeletons[i].clone.transform.GetChild(0).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y - 8, transform.rotation.eulerAngles.z);
-                //Left lower leg in tandem with left humerus
-                //skeletons[i].clone.transform.GetChild(1).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x-8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-                //Right lower leg back to neutral
-                skeletons[i].clone.transform.GetChild(4).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y + 9, transform.rotation.eulerAngles.z);
-
-                //Skull
-                skeletons[i].clone.transform.GetChild(5).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x - 8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-
-                //Sternum-hip
-                skeletons[i].clone.transform.GetChild(6).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x + 1, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-                skeletons[i].rightArmDir = 1;
-
-            }
-            else if (skeletons[i].rightArmDir == 1)
-            {
-                //Debug.Log("Phase2 backward");
-                //Right arm 
-                skeletons[i].clone.transform.GetChild(2).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 8);
-                //Left arm
-                skeletons[i].clone.transform.GetChild(7).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 8);
-                //Right humerus
-                skeletons[i].clone.transform.GetChild(3).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x - 8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-                //Right lower leg in tandem with right humerus
-                //skeletons[i].clone.transform.GetChild(4).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x-8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-                //Left lower leg back to neutral
-                skeletons[i].clone.transform.GetChild(1).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y + 9, transform.rotation.eulerAngles.z);
-                //Left humerus
-                skeletons[i].clone.transform.GetChild(0).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.rotation.eulerAngles.y + 8, transform.rotation.eulerAngles.z);
-                //Skull
-                skeletons[i].clone.transform.GetChild(5).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x + 8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-
-                //Sternum-hip
-                skeletons[i].clone.transform.GetChild(6).rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x - 1, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-                skeletons[i].rightArmDir = 0;
-            }
-        }
-    }
 
 }

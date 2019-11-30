@@ -45,7 +45,7 @@ public class SpiderWave : MonoBehaviour
     void Start()
     {
         level = 1;
-        origNumSpiders = 40;
+        origNumSpiders = 40;//40
         numSpidersLeft = origNumSpiders;
         spiderInitiationTimer = 0;
         currentSpider = 0;
@@ -75,25 +75,29 @@ public class SpiderWave : MonoBehaviour
         {
             spiderInitiationTimer += 1;
             spiderInitiationTimer = spiderInitiationTimer % spiderInitiationFreq;
-
+    //Debug.Log("init timer " + spiderInitiationTimer);
             spiderAction();
             //Debug.Log("num spiders left "+numSpidersLeft);
         }
 
 
-        if (numSpidersLeft == 0)
+        if (numSpidersLeft == 0 && level < 3)
         {
             level++;
             //Print next level 
             //Debug.Log("Level " + level);
-            currentSpider = 0;
+            if(level < 3)
+            {
+                currentSpider = 0;
+            }
+            
             //spiderInitiationTimer = 0;
 
             if (level == 2)
             {
                 textDisplay.transitionLevel("Not so fast kido, prepare for meaner spiders!!");
                 textDisplay.pause(500);
-                origNumSpiders = 50;
+                origNumSpiders = 50;//50
                 numSpidersLeft = origNumSpiders;
 
                 minInitiationFreq = 30;
@@ -109,8 +113,9 @@ public class SpiderWave : MonoBehaviour
 
             if (level == 3)
             {
-                textDisplay.gameOver("Game Over!!");
-                textDisplay.pause(2000);
+                //textDisplay.gameOver("Game Over!!");
+                textDisplay.transitionLevel("your Nightmare is Just About to Become Real!!");
+                textDisplay.pause(500);
             }
         }
     }
