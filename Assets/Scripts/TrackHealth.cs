@@ -60,7 +60,7 @@ public class TrackHealth : MonoBehaviour
 
             if (regainHealthTimer == 0)
             {
-                regainHealth(0.3f);
+                regainHealth(0.7f);
             }
         }
 

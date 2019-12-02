@@ -120,7 +120,7 @@ public class SpiderWave : MonoBehaviour
             if (level == 3)
             {
                 //textDisplay.gameOver("Game Over!!");
-                textDisplay.transitionLevel("Your Nightmare is Just About to Become Real!!");
+                textDisplay.transitionLevel("Hang Tight. Your Won't Survive This One!!");
                 textDisplay.pause(500);
             }
         }

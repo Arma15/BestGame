@@ -65,8 +65,8 @@ public class SkeletonWave : MonoBehaviour
 
         origNumSkeletons = 50;
         numSkeletonsLeft = origNumSkeletons;
-        killRadius = 60f;
-        hitPenalty = 8f;
+        killRadius = 40f;
+        hitPenalty = 7f;
         skeletonInitiationTimer = 0;
         currentSkeleton = 0;
         minInitiationFreq = 60;
@@ -82,7 +82,7 @@ public class SkeletonWave : MonoBehaviour
             //skeletons[i].rotationFreq = randFreq(20, 60);
             skeletons[i].rotationFreq = randFreq(5, 15);
             skeletons[i].rightArmDir = 0;
-            skeletons[i].translateSpeed = skeletons[0].rotationFreq / 1000f;
+            skeletons[i].translateSpeed = skeletons[0].rotationFreq / 170f;
         }
 
     }
