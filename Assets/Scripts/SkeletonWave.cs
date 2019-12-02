@@ -17,9 +17,13 @@ public class SkeletonWave : MonoBehaviour
         public float x;
         public float y;
         public float z;
-        public float dx;
-        public float dy;
-        public float dz;
+        public float dx0;
+        public float dy0;
+        public float dz0;
+        public float dx1;
+        public float dy1;
+        public float dz1;
+        public int whoToAttack;
 
     }
 
@@ -31,6 +35,8 @@ public class SkeletonWave : MonoBehaviour
     int maxNumSkeletons;
     int origNumSkeletons;
     public int numSkeletonsLeft;
+    float killRadius;
+    float hitPenalty;
 
     public int skeletonInitiationTimer;
     public int currentSkeleton;
@@ -43,12 +49,9 @@ public class SkeletonWave : MonoBehaviour
     public GameObject skeletonPrefab;
     public GameObject player;
     public GameObject gun;
+    public GameObject grandma;
     int sceneTransitionSettings;
     public Collider playerCollider;
-
-    //int[] skeletonRotationFreq;
-    //int[] skeletonRotationTimer;
-    // Start is called before the first frame update
 
     int randFreq(int min, int max)
     {
@@ -58,17 +61,12 @@ public class SkeletonWave : MonoBehaviour
     void Start()
     {
         maxNumSkeletons = 80;
-        //skeletons = new GameObject[maxNumSkeletons];
         skeletons = new Skeleton[maxNumSkeletons];
-        //skeletonRotationFreq = new int[maxNumSkeletons];
-        //skeletonRotationTimer = new int[maxNumSkeletons];
 
-        //skeletonRotationTimer[0] = 0;
-        //skeletonRotationFreq[0] = 150;
-
-
-        origNumSkeletons = 40;
+        origNumSkeletons = 50;
         numSkeletonsLeft = origNumSkeletons;
+        killRadius = 60f;
+        hitPenalty = 8f;
         skeletonInitiationTimer = 0;
         currentSkeleton = 0;
         minInitiationFreq = 60;
@@ -82,39 +80,23 @@ public class SkeletonWave : MonoBehaviour
         {
             skeletons[i].rotationTimer = 0;
             //skeletons[i].rotationFreq = randFreq(20, 60);
-            skeletons[i].rotationFreq = randFreq(10, 30);
+            skeletons[i].rotationFreq = randFreq(5, 15);
             skeletons[i].rightArmDir = 0;
             skeletons[i].translateSpeed = skeletons[0].rotationFreq / 1000f;
         }
-        /*skeletons[0].rotationTimer = 0;
-        skeletons[0].rotationFreq = 60;
-        skeletons[0].rightArmDir = 0;
-        skeletons[0].translateSpeed = skeletons[0].rotationFreq/3000f;*/
-
-        /*skeletons[0].clone = Instantiate(skeletonPrefab, new Vector3(0, 150, 0), Quaternion.Euler(0, 0, 0)) as GameObject;
-        skeletons[0].clone.transform.position = new Vector3(skeletons[0].clone.transform.position.x, skeletons[0].clone.transform.position.y-50, skeletons[0].clone.transform.position.z);
-        skeletons[0].clone.transform.localScale = new Vector3(2, 2, 2);*/
-
-        //skeletons[0].transform.localScale = new Vector3(1, 1, 1);
-
-
-        //Debug.Log(skeletons[0].transform.GetChild(0).name);
-
-        //skeletons[0].transform.GetChild(0).localScale = new Vector3(2, 2, 2);
-
-        //skeletons[0].transform.GetChild(0).eulerAngles.x = 90;
-
-        //skeletons[0].transform.GetChild(1).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y+8, transform.rotation.eulerAngles.z);
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        //int i = 0;
-        //skeletonRotationTimer[i] += 1;
-        //skeletonRotationTimer[i] = skeletonRotationTimer[i] % skeletonRotationFreq[i];
-//Debug.Log("text display paused: " + textDisplay.paused + " level: " + spiderWave.level);
+        if (numSkeletonsLeft == 0)
+        {
+            textDisplay.transitionLevel("Good Job Kid, You Survived Your Nightmare :)");
+            textDisplay.pause(1000);
+            Application.Quit();
+        }
+
         if (!textDisplay.paused && spiderWave.level == 3)
         {
             if(sceneTransitionSettings == 0)
@@ -129,7 +111,6 @@ public class SkeletonWave : MonoBehaviour
 
             skeletonInitiationTimer += 1;
             skeletonInitiationTimer = skeletonInitiationTimer % skeletonInitiationFreq;
-//Debug.Log("timer " + skeletonInitiationTimer);
             skeletonInitiation();
             //Debug.Log("num spiders left "+numSpidersLeft);
         }
@@ -138,6 +119,10 @@ public class SkeletonWave : MonoBehaviour
         float gunX = player.transform.position.x;
         float gunY = player.transform.position.y;
         float gunZ = player.transform.position.z;
+
+        float grandmaX = grandma.transform.position.x;
+        float grandmaY = grandma.transform.position.y;
+        float grandmaZ = grandma.transform.position.z;
 
         for (int i = 0; i < origNumSkeletons; i++)
         {
@@ -152,131 +137,65 @@ public class SkeletonWave : MonoBehaviour
                 skeletons[i].z = skeletons[i].clone.transform.position.z;
 
 
-                skeletons[i].dx = gunX - skeletons[i].x;
-                skeletons[i].dy = gunY - skeletons[i].y;
-                skeletons[i].dz = gunZ - skeletons[i].z;
+                skeletons[i].dx0 = gunX - skeletons[i].x;
+                skeletons[i].dy0 = gunY - skeletons[i].y;
+                skeletons[i].dz0 = gunZ - skeletons[i].z;
+
+                skeletons[i].dx1 = grandmaX - skeletons[i].x;
+                skeletons[i].dy1 = grandmaY - skeletons[i].y;
+                skeletons[i].dz1 = grandmaZ - skeletons[i].z;
 
 
-                Vector3 dirVector = new Vector3(skeletons[i].dx, gunY - 50, skeletons[i].dz);
-                //Vector3 forwardDir = skeletons[i].clone.transform.forward;
 
-                moveBones(i, dirVector, skeletons[i].dx, skeletons[i].dz);
+                //Orient spider with the direction vector of its forward movement vector (dx, y, dz)
+                Vector3 dirVector;
+
+                if (skeletons[i].whoToAttack == 0)
+                {//Attack player
+                    dirVector = new Vector3(skeletons[i].dx0, grandmaY - 5, skeletons[i].dz0);
+                    //Vector3 forwardDir = skeletons[i].clone.transform.forward;
+
+                    moveBones(i, dirVector, skeletons[i].dx0, skeletons[i].dz0);
+                }
+                else
+                {//Attack grandma
+                    dirVector = new Vector3(skeletons[i].dx1, grandmaY - 5, skeletons[i].dz1);
+                    //Vector3 forwardDir = skeletons[i].clone.transform.forward;
+
+                    moveBones(i, dirVector, skeletons[i].dx1, skeletons[i].dz1);
+                }
+
+
+            
+                /*Reduce player health if spider gets to player or grandma*/
+                float xSeparation0 = System.Math.Abs(skeletons[i].x - gunX);
+                float zSeparation0 = System.Math.Abs(skeletons[i].z - gunZ);
+
+                if (xSeparation0 < killRadius && zSeparation0 < killRadius)
+                {
+                    Destroy(skeletons[i].clone);
+                    numSkeletonsLeft--;
+                    spiderWave.myAudio.PlayOneShot(spiderWave.grunt, 0.7f);
+                    trackHealth.takeHit(hitPenalty);
+                }
+
+                float xSeparation1 = System.Math.Abs(skeletons[i].x - grandmaX);
+                float zSeparation1 = System.Math.Abs(skeletons[i].z - grandmaZ);
+
+                if (xSeparation1 < killRadius && zSeparation1 < killRadius)
+                {
+                    Destroy(skeletons[i].clone);
+                    numSkeletonsLeft--;
+                    spiderWave.myAudio.PlayOneShot(spiderWave.scream, 0.7f);
+                    trackHealth.takeHit(hitPenalty);
+
+                }
+
+
             }
 
         }
 
-
-
-
-
-
-
-
-
-
-
-        //Rotate skeleton to align with translation vector
-        //Vector3 dirVector = new Vector3(dx, dy, dz);
-        //Vector3 skeletonForward = skeletons[i].clone.transform.forward;
-
-        /*Vector3 dirVector = new Vector3(dx, gunY-50, dz);
-        Vector3 forwardDir = skeletons[i].clone.transform.forward;*/
-
-        //forwardDir = Quaternion.Euler(0, -45, 0) * forwardDir;//Rotate to align with skeleton's actual forward facing direction
-
-        /*Vector2 dirVectorXZ = new Vector2(dx, dz);
-        Vector2 forwardDirXZ = new Vector2(forwardDir.x, forwardDir.z);*/
-        //Vector2 skeletonForward = new Vector2() skeletons[i].clone.transform.forward;
-
-
-        //Debug.DrawRay(skeletons[i].clone.transform.position, dirVector * 200, Color.red, 0.5f);
-        //Debug.DrawRay(skeletons[i].clone.transform.position, forwardDir  * 200, Color.green, 0.5f);
-
-
-        //Quaternion q = Quaternion.FromToRotation(skeletons[i].clone.transform.right, dirVector);
-        //skeletons[i].clone.transform.rotation = q * skeletons[i].clone.transform.rotation;
-
-        //float angleBetweenDirVectorAndForward = Vector2.Angle(dirVectorXZ, forwardDirXZ);
-        //float angleBetweenDirVectorAndForward = Vector3.Angle(dirVector, forwardDir);
-
-        //if (angleBetweenDirVectorAndForward < 1 || angleBetweenDirVectorAndForward > 11)
-        //{
-        //skeletons[i].clone.transform.rotation = Quaternion.Euler(skeletons[i].clone.transform.rotation.eulerAngles.x, skeletons[i].clone.transform.rotation.eulerAngles.y - 10, skeletons[i].clone.transform.rotation.eulerAngles.z);
-        //}
-
-
-
-        /*for (int j = 0; j <= 7; j++)
-        {
-            skeletons[i].clone.transform.GetChild(j).rotation = Quaternion.LookRotation(dirVector);
-        }
-        skeletons[i].clone.transform.rotation = Quaternion.LookRotation(dirVector);*/
-
-        //skeletons[i].clone.transform.rotation = Quaternion.Euler(skeletons[i].clone.transform.rotation.eulerAngles.x, skeletons[i].clone.transform.rotation.eulerAngles.y + , skeletons[i].clone.transform.rotation.eulerAngles.z);
-
-
-        //Debug.Log("Angle b/w " + angleBetweenDirVectorAndForward);
-        //Debug.Log("Skeleton rotation around y: " + skeletons[i].clone.transform.rotation.eulerAngles.y);
-        //Debug.Log("")
-
-        //Debug.Log("Forward: "+"("+skeletonForward.x * Mathf.Rad2Deg + ","+skeletonForward.y * Mathf.Rad2Deg + ","+skeletonForward.z * Mathf.Rad2Deg + ")");
-        //Debug.Log("dirVector: " + "(" + dirVector.x + "," + dirVector.y + "," + dirVector.z + ")");
-
-
-
-        //moveBones(i, dirVector, dx, dz);
-
-
-
-
-
-        //Translate skeleton
-        //skeletons[i].x += dx * skeletons[i].translateSpeed;
-        //skeletons[i].z += dz * skeletons[i].translateSpeed;
-
-
-        //Debug.Log("("+x+","+y+","+z+")");
-        //skeletons[i].clone.transform.position = new Vector3(skeletons[i].x, skeletons[i].y, skeletons[i].z);
-
-
-
-
-        /*if (skeletons[i].rotationTimer == 0)
-        {
-            //Right arm 2
-            skeletons[i].clone.transform.GetChild(2).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x+8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-            //Left arm 7
-            skeletons[i].clone.transform.GetChild(7).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x-8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-
-
-            //skeletons[i].transform.GetChild(1).transform.Rotate(0, 30 * Time.deltaTime, 0);
-            //skeletons[i].clone.transform.GetChild(1).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 8, transform.rotation.eulerAngles.z);
-            //Debug.Log(0);
-        }
-
-        if (skeletons[i].rotationTimer == skeletons[i].rotationFreq / 3)
-        {
-
-            skeletons[i].clone.transform.GetChild(2).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x-8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-            //Left arm 7
-            skeletons[i].clone.transform.GetChild(7).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x+8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-
-            //skeletons[i].transform.GetChild(1).transform.Rotate(0, -30 * Time.deltaTime, 0);
-            //skeletons[i].clone.transform.GetChild(1).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 8, transform.rotation.eulerAngles.z);
-            //Debug.Log(1);
-        }
-
-        if (skeletons[i].rotationTimer == skeletons[i].rotationFreq * 2 / 3)
-        {
-
-            skeletons[i].clone.transform.GetChild(2).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x - 8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-            //Left arm 7
-            skeletons[i].clone.transform.GetChild(7).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x + 8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-
-            //skeletons[i].transform.GetChild(1).transform.Rotate(0, -30 * Time.deltaTime, 0);
-            //skeletons[i].clone.transform.GetChild(1).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 8, transform.rotation.eulerAngles.z);
-            //Debug.Log(1);
-        }*/
     }
 
 
@@ -288,157 +207,18 @@ public class SkeletonWave : MonoBehaviour
         {
 
             float posX = Random.Range(-400, 400);
-            float posY = 100;
+            float posY = 150;
             float posZ = Random.Range(-400, 400);
             skeletons[currentSkeleton].clone = Instantiate(skeletonPrefab, new Vector3(posX, posY, posZ), Quaternion.Euler(0, 0, 0)) as GameObject;
             //skeletons[currentSkeleton].clone.transform.position = new Vector3(skeletons[currentSkeleton].clone.transform.position.x, skeletons[currentSkeleton].clone.transform.position.y - 50, skeletons[currentSkeleton].clone.transform.position.z);
-            skeletons[currentSkeleton].clone.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
+            skeletons[currentSkeleton].clone.transform.localScale = new Vector3(3.1f, 3.1f, 3.1f);
+            skeletons[currentSkeleton].whoToAttack = rnd.Next(0, 2);//0 for player, 1 for grandma
 
             currentSkeleton++;
             skeletonInitiationFreq = randFreq(minInitiationFreq, maxInitiationFreq);//Change the initiation frequency for next skeleton
         }
 
     }
-
-
-
-    void moveBones1(int i, Vector3 dirVector, float dx, float dz)
-    {
-
-
-        if (skeletons[i].clone != null)
-        {
-            if (skeletons[i].rotationTimer == 0)
-            {
-
-                for (int j = 0; j <= 7; j++)
-                {
-                    skeletons[i].clone.transform.GetChild(j).transform.GetChild(0).rotation = Quaternion.LookRotation(dirVector);
-
-                }
-                //skeletons[i].clone.transform.rotation = Quaternion.LookRotation(dirVector);
-
-
-
-
-                if (skeletons[i].rightArmDir == 0)
-                {
-                    //Debug.Log("Phase1 forward");
-                    //Right arm 
-                    skeletons[i].clone.transform.GetChild(2).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 8);
-                    //Left arm
-                    skeletons[i].clone.transform.GetChild(7).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 8);
-                    //Right humerus
-                    skeletons[i].clone.transform.GetChild(3).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 8, transform.rotation.eulerAngles.z);
-                    //Right lower leg in tandem with right humerus
-                    skeletons[i].clone.transform.GetChild(4).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 9, transform.rotation.eulerAngles.z);
-                    //Left humerus
-                    skeletons[i].clone.transform.GetChild(0).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 8, transform.rotation.eulerAngles.z);
-                    //Skull
-                    skeletons[i].clone.transform.GetChild(5).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 1);
-
-                    //Sternum-hip
-                    skeletons[i].clone.transform.GetChild(6).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 1);
-
-
-                }
-                else if (skeletons[i].rightArmDir == 1)
-                {
-                    //Debug.Log("Phase1 backward");
-                    //Right arm 
-                    skeletons[i].clone.transform.GetChild(2).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 8);
-                    //Left arm
-                    skeletons[i].clone.transform.GetChild(7).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 8);
-                    //Right humerus
-                    skeletons[i].clone.transform.GetChild(3).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 8, transform.rotation.eulerAngles.z);
-                    //Left humerus
-                    skeletons[i].clone.transform.GetChild(0).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 8, transform.rotation.eulerAngles.z);
-                    //Left lower leg in tandem with left humerus
-                    skeletons[i].clone.transform.GetChild(1).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 9, transform.rotation.eulerAngles.z);
-                    //Skull
-                    skeletons[i].clone.transform.GetChild(5).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 1);
-
-                    //Sternum-hip
-                    skeletons[i].clone.transform.GetChild(6).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 1);
-                }
-
-
-                //Translate skeleton
-                translateSkeleton(i, dx, dz);
-
-            }
-
-
-            if (skeletons[i].rotationTimer == skeletons[i].rotationFreq / 2)
-            {//Return to neutral position
-
-                for (int j = 0; j <= 7; j++)
-                {
-                    //skeletons[i].clone.transform.GetChild(j).rotation = Quaternion.LookRotation(dirVector);
-                    skeletons[i].clone.transform.GetChild(j).transform.GetChild(0).rotation = Quaternion.LookRotation(dirVector);
-                    //Debug.Log(skeletons[i].clone.transform.GetChild(j).transform.GetChild(0).name);
-                    //skeletons[i].clone.transform.GetChild(j).rotation = Quaternion.FromToRotation(Vector3.forward, dirVector);
-
-                }
-                //skeletons[i].clone.transform.rotation = Quaternion.LookRotation(dirVector);
-                //skeletons[i].clone.transform.rotation = Quaternion.FromToRotation(Vector3.forward, dirVector);
-
-                if (skeletons[i].rightArmDir == 0)
-                {
-                    //Debug.Log("Phase2 forward");
-                    //Right arm 
-                    skeletons[i].clone.transform.GetChild(2).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 8);
-                    //Left arm
-                    skeletons[i].clone.transform.GetChild(7).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 8);
-                    //Right humerus
-                    skeletons[i].clone.transform.GetChild(3).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 8, transform.rotation.eulerAngles.z);
-                    //Left humerus
-                    skeletons[i].clone.transform.GetChild(0).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 8, transform.rotation.eulerAngles.z);
-                    //Left lower leg in tandem with left humerus
-                    //skeletons[i].clone.transform.GetChild(1).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x-8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-                    //Right lower leg back to neutral
-                    skeletons[i].clone.transform.GetChild(4).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 9, transform.rotation.eulerAngles.z);
-
-                    //Skull
-                    skeletons[i].clone.transform.GetChild(5).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 1);
-
-                    //Sternum-hip
-                    skeletons[i].clone.transform.GetChild(6).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 1);
-                    skeletons[i].rightArmDir = 1;
-
-                }
-                else if (skeletons[i].rightArmDir == 1)
-                {
-                    //Debug.Log("Phase2 backward");
-                    //Right arm 
-                    skeletons[i].clone.transform.GetChild(2).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 8);
-                    //Left arm
-                    skeletons[i].clone.transform.GetChild(7).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 8);
-                    //Right humerus
-                    skeletons[i].clone.transform.GetChild(3).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x - 8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-                    //Right lower leg in tandem with right humerus
-                    //skeletons[i].clone.transform.GetChild(4).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x-8, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-                    //Left lower leg back to neutral
-                    skeletons[i].clone.transform.GetChild(1).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 9, transform.rotation.eulerAngles.z);
-                    //Left humerus
-                    skeletons[i].clone.transform.GetChild(0).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 8, transform.rotation.eulerAngles.z);
-                    //Skull
-                    skeletons[i].clone.transform.GetChild(5).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z + 1);
-
-                    //Sternum-hip
-                    skeletons[i].clone.transform.GetChild(6).rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 1);
-                    skeletons[i].rightArmDir = 0;
-                }
-
-                //Translate skeleton
-                translateSkeleton(i, dx, dz);
-            }
-
-        }
-
-
-    }
-
 
 
 

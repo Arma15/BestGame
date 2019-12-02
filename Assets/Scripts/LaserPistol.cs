@@ -65,7 +65,7 @@ public class LaserPistol : MonoBehaviour
                 else
                 {
                     //Debug.Log("Hit skeleton");
-                    //skeletonWave.numSkeletonsLeft--;
+                    skeletonWave.numSkeletonsLeft--;
                     Destroy(hit.collider.gameObject.transform.parent.gameObject.transform.parent.gameObject);
                     //Destroy(hit.collider.gameObject.transform.parent.gameObject);
                 }

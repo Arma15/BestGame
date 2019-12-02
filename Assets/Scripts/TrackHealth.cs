@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class TrackHealth : MonoBehaviour
 {
+    public TextDisplay textDisplay;
     public Slider healthBarSlider;
     public float maxHealth = 100;//Max health should match max health in health bar slider settings 
     public float health;
@@ -29,7 +30,9 @@ public class TrackHealth : MonoBehaviour
         //Debug.Log("Hit "+health);
         if (health < 0.01)
         {
-            Debug.Log("You died!");
+            textDisplay.transitionLevel("Goodnight Son :( ");
+            textDisplay.pause(1000);
+            Application.Quit();
         }
 
     }

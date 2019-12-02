@@ -19,6 +19,7 @@ public class SpiderWave : MonoBehaviour
 
     public GameObject house;
     public GameObject player;
+    public GameObject grandma;
 
     public GameObject spiderPrefab;
 
@@ -26,6 +27,7 @@ public class SpiderWave : MonoBehaviour
     float[] spiderMoveSpeed;
     int[] spiderBodyRotationFreq;
     int[] spiderRotationTimer;
+    int[] whoToAttack;
     float killRadius;
     //public int hits;
     float hitPenalty;
@@ -33,7 +35,9 @@ public class SpiderWave : MonoBehaviour
     public float moveSpeedMin;
     public float moveSppedMax;
 
-    AudioSource grunt;
+    public AudioClip grunt;
+    public AudioClip scream;
+    public AudioSource myAudio;
 
 
     int randFreq(int min, int max)
@@ -45,7 +49,7 @@ public class SpiderWave : MonoBehaviour
     void Start()
     {
         level = 1;
-        origNumSpiders = 40;//40
+        origNumSpiders = 40;
         numSpidersLeft = origNumSpiders;
         spiderInitiationTimer = 0;
         currentSpider = 0;
@@ -57,13 +61,15 @@ public class SpiderWave : MonoBehaviour
         spiderMoveSpeed = new float[maxNumSpiders];
         spiderBodyRotationFreq = new int[maxNumSpiders];
         spiderRotationTimer = new int[maxNumSpiders];
+        whoToAttack = new int[maxNumSpiders];
         killRadius = 30f;
         //hits = 0;
-        hitPenalty = 4f;
-        moveSpeedMin = 0.001f;
-        moveSppedMax = 0.005f;
+        hitPenalty = 6f;
+        moveSpeedMin = 0.008f;
+        moveSppedMax = 0.012f;
 
-        grunt = GetComponent<AudioSource>();
+        myAudio = GetComponent<AudioSource>();
+
 
     }
 
@@ -95,9 +101,9 @@ public class SpiderWave : MonoBehaviour
 
             if (level == 2)
             {
-                textDisplay.transitionLevel("Not so fast kido, prepare for meaner spiders!!");
+                textDisplay.transitionLevel("Not so fast kido, Prepare for Meaner Spiders!!");
                 textDisplay.pause(500);
-                origNumSpiders = 50;//50
+                origNumSpiders = 50;
                 numSpidersLeft = origNumSpiders;
 
                 minInitiationFreq = 30;
@@ -105,16 +111,16 @@ public class SpiderWave : MonoBehaviour
                 spiderInitiationFreq = randFreq(minInitiationFreq, maxInitiationFreq);//For first spider
 
 
-                killRadius = 30f;
-                hitPenalty = 5f;
-                moveSpeedMin = 0.004f;
-                moveSppedMax = 0.008f;
+                killRadius = 35f;
+                hitPenalty = 7f;
+                moveSpeedMin = 0.012f;
+                moveSppedMax = 0.016f;
             }
 
             if (level == 3)
             {
                 //textDisplay.gameOver("Game Over!!");
-                textDisplay.transitionLevel("your Nightmare is Just About to Become Real!!");
+                textDisplay.transitionLevel("Your Nightmare is Just About to Become Real!!");
                 textDisplay.pause(500);
             }
         }
@@ -145,13 +151,14 @@ public class SpiderWave : MonoBehaviour
                 posX = xRoomBounds[indexX];
             }
             float posY = Random.Range(0, 50);
-            float moveSpeed = Random.Range(0.001f, 0.005f);
+            float moveSpeed = Random.Range(moveSpeedMin, moveSppedMax);
 
             spiders[currentSpider] = Instantiate(spiderPrefab, new Vector3(posX, posY, posZ), Quaternion.Euler(-76.095f, -0.195f, -31.17f)) as GameObject;
             spiders[currentSpider].transform.localScale = new Vector3(10, 10, 10);
             spiderMoveSpeed[currentSpider] = moveSpeed;
             spiderBodyRotationFreq[currentSpider] = rnd.Next(9, 15);//Random # btw 9 and 14
             spiderRotationTimer[currentSpider] = 0;
+            whoToAttack[currentSpider] = rnd.Next(0, 2);//0 for player 1 for grandma
 
             currentSpider++;
             spiderInitiationFreq = randFreq(minInitiationFreq, maxInitiationFreq);//Change the initiation frequency for next spider
@@ -171,11 +178,30 @@ public class SpiderWave : MonoBehaviour
                 float playerY = player.transform.position.y;
                 float playerZ = player.transform.position.z;
 
-                float dx = playerX - x;
-                float dz = playerZ - z;
-                Vector3 dirVector = new Vector3(dx, y, dz);
+                float grandmaX = grandma.transform.position.x;
+                float grandmaY = grandma.transform.position.y;
+                float grandmaZ = grandma.transform.position.z;
+
+                float dx0 = playerX - x;
+                float dz0 = playerZ - z;
+                Vector3 dirVector0 = new Vector3(dx0, y, dz0);
+
+                float dx1 =grandmaX - x;
+                float dz1 = grandmaZ - z;
+                Vector3 dirVector1 = new Vector3(dx1, y, dz1);
+
                 //Orient spider with the direction vector of its forward movement vector (dx, y, dz)
-                spiders[i].transform.rotation = Quaternion.LookRotation(dirVector);
+                if(whoToAttack[i] == 0)
+                {//Attack player
+                    //Debug.Log("Spider " + i + " attacking player");
+                    spiders[i].transform.rotation = Quaternion.LookRotation(dirVector0);
+                }
+                else
+                {//Attack grandma
+                    //Debug.Log("Spider " + i + " attacking grandma");
+                    spiders[i].transform.rotation = Quaternion.LookRotation(dirVector1);
+                }
+                
 
                 //Move spider to floor level
                 if (y > houseY)
@@ -185,28 +211,52 @@ public class SpiderWave : MonoBehaviour
                 }
 
 
-                //Move spider towards player
+                //Move spider towards player or grandma
                 if (y <= houseY)
                 {
 
-                    x += dx * spiderMoveSpeed[i];
-                    z += dz * spiderMoveSpeed[i];
+                    if(whoToAttack[i] == 0)
+                    {
+                        x += dx0 * spiderMoveSpeed[i];
+                        z += dz0 * spiderMoveSpeed[i];
+                    }
+                    else
+                    {
+                        x += dx1 * spiderMoveSpeed[i];
+                        z += dz1 * spiderMoveSpeed[i];
+                    }
+
 
                     spiders[i].transform.position = new Vector3(x, y, z);
 
 
-                    /*Reduce player health if spider gets to player*/
-                    float xSeparation = System.Math.Abs(x - playerX);
-                    float zSeparation = System.Math.Abs(z - playerZ);
+                    /*Reduce player health if spider gets to player or grandma*/
+                    float xSeparation0 = System.Math.Abs(x - playerX);
+                    float zSeparation0 = System.Math.Abs(z - playerZ);
 
-                    if (xSeparation < killRadius && zSeparation < killRadius)
+                    if (xSeparation0 < killRadius && zSeparation0 < killRadius)
                     {
                         Destroy(spiders[i]);
                         numSpidersLeft--;
-                        grunt.Play(0);//Play grunt sound
+                        //grunt.Play(0);//Play grunt sound
+                        myAudio.PlayOneShot(grunt, 0.7f);
                         trackHealth.takeHit(hitPenalty);
 
                     }
+
+                    float xSeparation1 = System.Math.Abs(x - grandmaX);
+                    float zSeparation1 = System.Math.Abs(z - grandmaZ);
+
+                    if (xSeparation1 < killRadius && zSeparation1 < killRadius)
+                    {
+                        Destroy(spiders[i]);
+                        numSpidersLeft--;
+                        //scream.Play(0);//Play grunt sound
+                        myAudio.PlayOneShot(scream, 0.7f);
+                        trackHealth.takeHit(hitPenalty);
+
+                    }
+
 
                 }
 
