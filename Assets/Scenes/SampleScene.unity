@@ -349,26 +349,6 @@ CapsuleCollider:
   m_Height: 58.176117
   m_Direction: 1
   m_Center: {x: -0.15625286, y: -13.690923, z: 3.026291}
---- !u!1 &160173333 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100000, guid: a64bcf8317fd7184fb52a3b0ec724a68,
-    type: 3}
-  m_PrefabInstance: {fileID: 1436202112}
-  m_PrefabAsset: {fileID: 0}
---- !u!136 &160173335
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 160173333}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &172663587
 GameObject:
   m_ObjectHideFlags: 0
@@ -660,20 +640,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1144611028}
   m_PrefabAsset: {fileID: 0}
---- !u!136 &249882858
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 249882856}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &281903519
 GameObject:
   m_ObjectHideFlags: 0
@@ -1974,6 +1940,25 @@ CapsuleCollider:
   m_Height: 33.011288
   m_Direction: 1
   m_Center: {x: 3.4110715, y: -8.130455, z: 1.664173}
+--- !u!1 &985505588 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: e62c43666cc88844ca232076b24b5bc4,
+    type: 3}
+  m_PrefabInstance: {fileID: 1144611028}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &985505589
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 985505588}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 30.128504, y: 37.4673, z: 40.931202}
+  m_Center: {x: 0.036649708, y: 19.186852, z: -12.076502}
 --- !u!1 &995353391
 GameObject:
   m_ObjectHideFlags: 0
@@ -2135,7 +2120,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1092839859}
-  - component: {fileID: 1092839860}
   m_Layer: 2
   m_Name: Grandma
   m_TagString: Untagged
@@ -2163,20 +2147,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0.036000002, y: 57.263004, z: 0.36100003}
---- !u!136 &1092839860
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1092839858}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1144611028
 PrefabInstance:
   m_ObjectHideFlags: 0
